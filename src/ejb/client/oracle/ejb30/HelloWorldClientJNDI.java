@@ -9,9 +9,9 @@ public class HelloWorldClientJNDI {
             System.out.println("Looking up HelloWorld");
             InitialContext ic = new InitialContext();
             HelloWorld helloWorld = (HelloWorld) ic.lookup("java:comp/env/ejb/HelloWorld");
-            System.out.println("Invoking sayHello method with parameter \"" + " Debu Panda " + "\"");
+            System.out.println("Invoking sayHello method with parameter \"" + " Sausage & Chips " + "\"");
             // Call any of the Remote methods below to access the EJB
-            helloWorld.sayHello("Debu Panda!");
+            helloWorld.sayHello("Sausage and Chips!");
             System.out.println("Please view the console to see the output emitted by the EJB Method");
         } catch (Throwable ex) {
             ex.printStackTrace();
