@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<link rel=File-List href="./how-to-ejb30-stateless-ejb_files/filelist.xml">
+<title>How-To Develop a Stateless Session EJB using EJB 3.0</title>
+<link rel=Stylesheet type="text/css" media=all href=blaf_otn.css>
+</head>
+
+<body>
+
+
+
+<h1>How-To Develop a Stateless Session EJB using
+EJB 3.0</h1>
+
+</div>
+
+<p><b>Date: 5/06/06<br>
+Author: Debu Panda </b></p>
+
+<ul type=disc>
+ <li><a href="#introduction">Introduction
+     </a></li>
+ <ul type=circle>
+  <li><a href="#slsb">Stateless
+      Session Bean example using EJB 3.0 </a></li>
+  <li><a href="#client">Sample EJB
+      Client</a></li>
+ </ul>
+ <li><a href="#prerequisites">Prerequisites</a>
+  </li>
+ <ul type=circle>
+  <li><a href="#know">What you need
+      to know</a></li>
+  <li><a href="#requirements">Software
+      requirements</a></li>
+  <li><a href="#notations">Notations</a></li>
+ </ul>
+ <li><a href="#learn">Building the
+     Application</a></li>
+ <li><a href="#application">Running
+     the Application</a> </li>
+ <ul type=circle>
+  <li><a href="#distribution">Examine
+      the Sample File Directories </a></li>
+  <li><a href="#setup">Configure the
+      Environment</a></li>
+  <li><a href="#oc4j">Start the
+      Server</a></li>
+  <li><a href="#compiling">Generate,
+      Compile and Deploy the Application</a></li>
+  <li><a href="#running">Run the
+      application</a></li>
+ </ul>
+ <li><a href="#summary">Summary</a></li>
+</ul>
+
+
+
+<h2><a name=introduction></a>Introduction</h2>
+
+</div>
+
+<p>This example application demonstrates Oracle's support for the EJB 3.0
+specification using a Stateless Session EJB and illustrates the simplified EJB
+invocation model from an EJB client. </p>
+
+<p>EJB 3.0 greatly simplifies the development of EJBs, removing many complex
+development tasks. For example, creating a simple stateless EJB using EJB 2.1
+requires a bean class and two interfaces, as well as a deployment descriptor.
+The remote (or local) and home interfaces had to extend <strong>javax.ejb.EJBObject</strong>
+and <strong>javax.ejb.EJBHome</strong> interfaces respectively, and the bean
+class had to implement the<strong> javax.ejb.SessionBean</strong> interface.
+However, in EJB 3.0, development is greatly simplified due to the following
+specifications:</p>
+
+<ul>
+ <li>The bean class can be a plain
+     java class (POJO)</li>
+ <li>The EJB interface may be a pure
+     business interface (POJI)</li>
+ <li>The EJB Home interface is no
+     longer needed</li>
+ <li>Annotations can be used instead
+     of a dedicated deployment descriptor</li>
+</ul>
+
+<p>This demonstration uses the HelloWorld bean to demonstrate a simple
+stateless EJB using EJB 3.0.</p>
+<p><strong>Note</strong>: Certain EJB 3.0 API may change when EJB 3.0 specification becomes final and you may have to change your application to comply your application with final EJB 3.0 speciation. Oracle cannot guarantee backward compatibility of all EJB 3.0 features in future version of OC4J that complies with final version of the specification.</p>
+<h3 style='margin:0in;margin-bottom:.0001pt'><a name=slsb></a>Stateless Session Bean example using EJB 3.0 </h3>
+
+<p><span style='color:black'>The following is the remote
+interface for the HelloWorld EJB. Note that this is apure Java
+interfaceand does not extend <strong>EJBObject</strong>. </p>
+
+<p>
+<pre><code>package
+oracle.ejb30; 
+import javax.ejb.Remote;
+<strong>@Remote</strong>
+public interface HelloWorld 
+{
+public void sayHello(String name);
+} </code></pre>
+</p>
+
+<p>The bean class is a plain java
+class that implements a business interface:</p>
+
+<p><pre><code>package
+oracle.ejb30;<br>
+import javax.ejb.Stateless;
+<strong>@Stateless</strong>
+public class HelloWorldBean implements HelloWorld 
+{
+public void sayHello(String name)
+{
+System.out.println(&quot;Hello &quot;+name +&quot; from
+first EJB3.0&quot;);
+
+}</code></pre> </p>
+
+<p>Note that the bean uses the <strong>@Stateless</strong>
+annotation to mark the bean as a Stateless EJB. <strong>@Remote </strong>can be
+used to annotate a remote interface and deployment descriptor for the EJB, but
+is not required. </p>
+
+<h3><a name=client></a>Sample EJB Client </h3>
+
+<p>Note that the EJB home interface
+is no longer required, and a bean instance is not created by invoking the
+create() method. Instead, we can inject an instance of bean using dependency injection and directly invoke a method on the EJB, as shown
+in the following client accessor.<span style='color:black'><u1:p></u1:p></p>
+
+
+
+<p> 
+<pre><code>@EJB
+private static HelloWorld helloWorld;
+helloWorld.sayHello(&quot;Debu Panda&quot; ); </code> </pre>
+</p>
+
+
+
+<h2><a name=prerequisites></a>Prerequisites</h2>
+
+</div>
+
+<h3 ><a name=know></a>What you need to know</h3>
+
+<p>In order to complete the example application,
+you should be familiar with the following: </p>
+
+<ul>
+  <li>EJB 2.1
+    
+</li>
+  <li>EJB 3.0 </li>
+</ul>
+<p>For further information on EJB
+3.0, see the following documents on OTN:</p>
+
+<ul>
+  <li>  Link to other <a
+href="http://www.oracle.com/technology/tech/java/oc4j/ejb3">EJB 3.0 Howto's on
+    OTN</a> </li>
+</ul>
+<h3 ><a name=requirements></a>Software Requirements</h3>
+
+<p>This demonstration requires
+that the following software components are installed and configured correctly:</p>
+
+<ul>
+  <li><a href="http://www.oracle.com/technology/tech/java/oc4j/ejb3/">Oracle
+
+Application Server 10g 10.1.3.1 Preview </a> </li>
+    <li>
+Sun JDK version 1.5 or above, available <a
+href="http://java.sun.com/j2se/">here</a>
+    </li><li>
+    
+Any HTML browser like Mozilla, Microsoft Internet Explorer,
+    Netscape, etc. 
+    
+</li>
+</ul>
+<h3 ><a name=notations></a>Notations</h3>
+
+<ul>
+  <li><strong>%ORACLE_HOME%</b> </strong>- The directory where you installed Oracle Application Server
+    10g 10.1.3.1 Preview </p>
+    
+</li>
+  <li><strong>%JAVA_HOME%</strong></b> - The directory where your JDK is installed</li>
+  <li>
+      </p>
+      
+      <strong>%HOWTO_HOME%</strong></b> - The directory where this demo is unzipped
+      </p>
+      
+  </li>
+</ul>
+
+
+<h2 ><a name=learn id=learn></a>Building the Application</h2>
+
+</div>
+
+<p>The Javadoc for this
+application is located in the <b>%HOWTO_HOME%/doc/javadoc/</b> directory. </p>
+
+<p>The configuration files are
+located in the <b>%HOWTO_HOME%/etc</b> directory, including deployment
+descriptor files such as application.xml.<o:p></o:p></p>
+
+
+
+<h2 ><a name=application
+id=application></a>Running the Application</h2>
+
+<p>To run the sample application
+on a standalone instance of Oracle Application Server 10g 10.1.3, follow these
+steps:<o:p></o:p></p>
+
+<h3 ><a name=distribution
+id=distribution></a>1. Examine the Sample File
+Directories</h3>
+
+
+<ul><li><b>build</b> - temporary directory created during the build</li>
+  <li><b>log</b> - temporary directory holding build/deploy logs
+    </p>
+  </li>
+  <li><b>etc</b> - all necessary files to package the application </li>
+  <li><b>lib</b> - holds the application archives that could be deployed </li>
+  <li><b>doc</b> - the How-to document and Javadoc's 
+    <ul>
+      <li><b>javadoc</b> - the javadoc of the different source files</li>
+      <li><b>how-to-ejb30-slsb.html</b> - this How-to page </li>
+    </ul>
+  </li>
+  <li><b>src</b> - the source of the demo 
+    <ul>
+      <li><b>ejb</b> - contains the sample SLSB code</li>
+      <li><strong>client</strong> - contains application client code </li>
+    </ul>
+  </li>
+</ul>
+<h3 ><a name=setup id=setup></a>2. Configure the Environment</h3>
+
+<p>Ensure that the following environment variables are defined: </p>
+
+<ul>
+  <li> <b>%ORACLE_HOME%</b> - The directory where you installed OC4J.</li>
+  <li> <b>%JAVA_HOME%</b> - The directory where you installed the JDK.</li>
+  <li><b>%PATH%</b> - includes <b>%ORACLE_HOME%</b> /ant/bin </li>
+</ul>
+<h3 ><a name=compiling id="oc4j"></a>3. Starting OC4J instance </h3>
+
+<p>Start OC4J stand alone using the following command after you make the above changes. </p>
+<blockquote>
+  <pre><code> &gt;%ORACLE_HOME%/bin/oc4j -start </code></pre>
+</blockquote>
+<p>If you are using an OracleAS managed install, start using the following command after you make the above changes. </p>
+<blockquote>
+  <pre><code>&gt; %ORACLE_HOME%/opmn/bin/opmnctl startall</code></pre>
+</blockquote>
+<h3><a name=compiling id="compiling"></a>4. Generate, Compile, and Deploy the Application</h3>
+<p> Ant 1.6.2 is shipped with OC4J and you have to set your <strong>PATH</strong> environment variable to <strong>$ORACLE_HOME/ant/bin</strong>. On some operating systems, Ant does not currently support the use of environment variables. If this is the case for your operating system, please modify the ant-oracle.xml file located in the <strong>%HOWTO_HOME% </strong>directory. </p>
+<p> Edit ant-oracle.properties (in the demo<s> </s>directory) and <s></s> ensure the following properties are set to the correct values, as indicated below for OC4J standalone:<br>
+<ul>
+  <li><b>oc4j.host</b>: host where OC4J is running <s></s> (default localhost)</li>
+  <li><b>oc4j.admin.port</b>: RMI port number (default 23791)</li>
+  <li><b>oc4j.admin.user</b>: admin user name (default oc4jadmin)</li>
+  <li><b>oc4j.admin.password</b>: admin user password (default welcome)</li>
+  <li><b>oc4j.binding.module</b>: website name where deployed web modules are bound (default http-web-site)</li>
+</ul>
+<p>If you are using OracleAS managed install then you have appropriately change the following properties beside changing<strong> oc4j.admin.user </strong>and <strong>oc4j.admin.password</strong> for your managed OC4J instance in OracleAS install. </p>
+<ul>
+  <li><b>opmn.host</b>: the hostname/IP where OracleAS is running <s></s> (default localhost)</li>
+  <li><strong>opmn.port</strong>: OPMN request port (default 6003) for the OracleAS install </li>
+  <li><b>oc4j.instance</b>: admin user name (default oc4jadmin)</li>
+</ul>
+<p>You have to uncomment appropriate deployer.uri in the ant-oracle.properties based on your environment i.e. a single instance OC4J or a clustered OC4J instance/group managed by OPMN.</p>
+<p>You have to make changes in<strong> jndi.properties </strong>such as provider.url, principal and credential appropriate to your environment. If you are using OracleAS install, you have to use provider.url in the following format: <strong>opmn:ormi://localhost:6003:home/ejb30slsb</strong>. </p>
+<p></p>
+To build the application, type the following command from the <strong>%HOWTO_HOME%</strong>directory:
+<div class="code"></div>
+
+  <pre><code>&gt;ant </code></pre>
+  </p>
+
+<p>You should now have the newly
+created <b>ejb30slsb.ear</b> in your <b>%HOWTO_HOME%/lib</b> directory.</p>
+
+<p>This command would also attempt
+to deploy the application if the build is successful. It will first test
+whether OC4J is running. </p>
+
+<p>Note that you can also deploy
+the application separately . Ensure the <b>%ORACLE_HOME%</b> environment
+variable is defined, and from the <b>%HOWTO_HOME%</b> directory, type the
+command:</p>
+
+<pre><code>&gt;ant deploy</code></pre>
+
+<h3><a name=running id=running></a>5. Run the Application</h3>
+
+<p>Run the sample by providing the
+following command, including a name as the program argument:</p>
+
+<p><pre><code>&gt;ant run </code></pre></p>
+
+<p>Return to the console where you
+started OC4J and you will see output generated by the HelloWorld EJB.</p>
+
+
+
+<h2><a name=summary></a>Summary</h2>
+
+
+
+<p>In this document, you should
+have learned how to: </p>
+
+ <ul>
+   <li>Develop and deploy a simple stateless session bean using EJB 3.0 </li>
+   <li>Deploy and execute a simple stateless session bean in the Oracle
+      Application Server 10g 10.1.3.1
+     </div>
+      
+  </li>
+ </ul>
+</body>
+
+</html>
