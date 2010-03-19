@@ -436,9 +436,9 @@
          ** ************************************************************* -->
 
 
- <target name="run-jndi" depends="init">
+ <target name="run-di" depends="init">
         <java classname="${cli.class}" fork="yes">
-           <arg value="Soldar Goran!"/>
+           <arg value="lib/${cli.name}.jar"/>
             <classpath>
              <pathelement location="${lib.dir}/${cli.name}.jar"/>
              <pathelement location="${bld.ejb.dir}"/>
@@ -448,7 +448,7 @@
         </java>
     </target>
 
-<target name="run" depends="init">
+<target name="run-jndi" depends="init">
         <java classname="oracle.oc4j.appclient.AppClientContainer" fork="yes">
            <arg value="lib/${cli.name}.jar"/>
             <classpath>
